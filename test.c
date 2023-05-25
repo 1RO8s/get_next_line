@@ -6,7 +6,7 @@
 /*   By: hnagasak <hnagasak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/23 18:33:18 by hnagasak          #+#    #+#             */
-/*   Updated: 2023/05/24 15:12:05 by hnagasak         ###   ########.fr       */
+/*   Updated: 2023/05/25 22:25:24 by hnagasak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,15 +19,14 @@ int main(){
 
     char *line = (char*)malloc(sizeof(char) * BUFFER_SIZE);
     if (line == NULL)
-        printf("fail allocate line\n");
+        printf("fail allocate memories\n");
 
-    line = get_next_line(fd);
-    printf("line:%s",line);
-
-    line = get_next_line(fd);
-    printf("line:%s",line);
-
+    for(int i=0;i<10;i++){
+        line = get_next_line(fd);
+        printf("line:%s",line);
+    }
 }
+
 
 
 

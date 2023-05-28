@@ -6,7 +6,7 @@
 /*   By: hnagasak <hnagasak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/23 18:33:18 by hnagasak          #+#    #+#             */
-/*   Updated: 2023/05/25 22:25:24 by hnagasak         ###   ########.fr       */
+/*   Updated: 2023/05/27 16:12:58 by hnagasak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,10 +21,10 @@ int main(){
     if (line == NULL)
         printf("fail allocate memories\n");
 
-    for(int i=0;i<10;i++){
+    // for(int i=0;i<10;i++){
         line = get_next_line(fd);
         printf("line:%s",line);
-    }
+    // }
 }
 
 

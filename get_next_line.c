@@ -6,47 +6,72 @@
 /*   By: hnagasak <hnagasak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/23 17:53:30 by hnagasak          #+#    #+#             */
-/*   Updated: 2023/05/25 22:46:37 by hnagasak         ###   ########.fr       */
+/*   Updated: 2023/05/28 21:19:37 by hnagasak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 #include <stdio.h>
-char	*has_next_line(char *buf)
+
+
+/**
+ * 先頭から最初の改行までの文字列を取り出す
+ * ex) ("ABC\nDEF\nG") -> "ABC\0"
+ * ex) ("ABC\0") -> "ABC\0"
+ */
+char *substr_until_newline(char *buf)
 {
-	while (*buf != '\0')
-	{
-		if (*buf == '\n')
-		{
-			return (buf);
-		}
+	char *dup;
+	char *line_end;
+	dup = ft_strdup(buf);
+	line_end = ft_strchr(dup,'\n');
+	
+	if(line_end != NULL){
+		line_end = '\0'; // 改行が見つかったら終端文字に置き換える
 	}
-    return (0);
+	return dup;
+}
+
+/**
+ * 最初の改行から末尾までの文字列を取り出す
+ */
+char *substr_after_newline(char *buf)
+{
+	char *dup;
+	char *line_end;
+	dup = ft_strdup(buf);
+	line_end = ft_strchr(dup,'\n');
+	
+
+	if(line_end != NULL){
+		line_end = '\0';
+		return line_end + 1; // 改行の次のアドレスを返す
+	}
+	return dup;
 }
 
 char	*get_next_line(int fd)
 {
-	static char	*rest;
+	static char	*remaining_str;
 	char		*buf;
-	size_t		read_bytes;
+	ssize_t		read_bytes;
+	int is_eof_reached;
 
-	buf = (char *)malloc(sizeof(char) * BUFFER_SIZE);
+	buf = (char *)malloc(sizeof(char) * BUFFER_SIZE + 1);
 	if (buf == NULL)
 		printf("fail\n");
-	// size_t n;
-	// char *p_buf;
-	// p_buf = buf;
-	// n = BUFFER_SIZE;
-	// while (n--)
-	// 	*(p_buf++) = (unsigned char);
+
 	read_bytes = 0;
 	read_bytes = read(fd, buf, BUFFER_SIZE);
-	printf("read_bytes:%ld\n", read_bytes);
-	while (!has_next_line(buf))
-	{
+	buf[read_bytes] = '\0';
+	if(BUFFER_SIZE < read_bytes)
+		is_eof_reached = TRUE;
 
-		read_bytes += read(fd, buf, BUFFER_SIZE);
-	}
+	char *line = substr_until_newline(buf); // 改行までの文字列を取り出す
+	char *remaining_str = substr_after_newline(buf);
+
+
+
 	//
 	// printf("end:%c\n",buf[read_bytes-2]);
 	// printf("end:%c\n",buf[read_bytes-1]);
@@ -56,7 +81,3 @@ char	*get_next_line(int fd)
 	return (&buf[0]);
 }
 
-//
-// 改行だけの行は'\0'を返す
-
-// abcdefg\n\nhijklmno\npqrstu\n\0

@@ -6,7 +6,7 @@
 /*   By: hnagasak <hnagasak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/28 19:12:36 by hnagasak          #+#    #+#             */
-/*   Updated: 2023/05/28 19:33:30 by hnagasak         ###   ########.fr       */
+/*   Updated: 2023/05/31 16:39:05 by hnagasak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,24 @@ size_t	ft_strlen(const char *s)
 	while (s[len])
 		len++;
 	return (len);
+}
+
+char	*ft_strchr(const char *s, int c)
+{
+	const char	*result;
+	char		ch;
+
+	ch = (char)c;
+	result = s;
+	while (*result != '\0')
+	{
+		if (*result == ch)
+			return ((char *)result);
+		result++;
+	}
+	if (*result == '\0' && *result == ch)
+		return ((char *)result);
+	return (NULL);
 }
 
 size_t	ft_strlcpy(char *dst, const char *src, size_t dstsize)
@@ -44,7 +62,7 @@ char	*ft_strdup(const char *s1)
 {
 	char	*s2;
 
-	s2 = ft_calloc(ft_strlen(s1) + 1, sizeof(char));
+	s2 = (char *)malloc(sizeof(char) * (ft_strlen(s1) + 1));
 	if (s2 != NULL)
 		ft_strlcpy(s2, s1, ft_strlen(s1) + 1);
 	return (s2);
@@ -91,7 +109,7 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	else if (s1 != NULL && s2 == NULL)
 		return (ft_strdup(s1));
 	len = ft_strlen(s1) + ft_strlen(s2);
-	s3 = ft_calloc(len + 1, sizeof(char));
+	s3 = malloc(sizeof(char) * (len + 1));
 	if (s3 != NULL)
 	{
 		ft_strlcpy(s3, s1, len + 1);

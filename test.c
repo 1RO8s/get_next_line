@@ -6,7 +6,7 @@
 /*   By: hnagasak <hnagasak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/23 18:33:18 by hnagasak          #+#    #+#             */
-/*   Updated: 2023/05/31 19:11:49 by hnagasak         ###   ########.fr       */
+/*   Updated: 2023/06/04 19:44:52 by hnagasak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 void read_single_file()
 {
+    printf("\n----- single file -----\n");
     int fd = open("./testfiles/file002", O_RDONLY);
     printf("fd:%d\n", fd);
 
@@ -32,6 +33,7 @@ void read_single_file()
 
 void read_multiple_file()
 {
+    printf("\n----- multiple file -----\n");
     int fd[3];
 
     char *file_paths[3] = {
@@ -43,12 +45,13 @@ void read_multiple_file()
     for (int i = 0; i < 3; i++)
     {
         fd[i] = open(file_paths[i], O_RDONLY);
-        printf("fd[%d]:%d\n", i, fd[i]);
+        printf("fd[%d]:%d ", i, fd[i]);
     }
+    printf("\n");
 
     for (int j = 0; j < 2; j++)
     {
-        for (int i = 0; i < 3 ;i++)
+        for (int i = 0; i < 3; i++)
         {
             char *line = (char *)malloc(sizeof(char) * BUFFER_SIZE);
             if (line == NULL)
@@ -64,7 +67,24 @@ void read_multiple_file()
     }
 }
 
+void read_empty_file()
+{
+    printf("\n----- empty file -----\n");
+    int fd = open("./testfiles/empty", O_RDONLY);
+    printf("fd:%d\n", fd);
+
+    char *line = (char *)malloc(sizeof(char) * BUFFER_SIZE);
+    if (line == NULL)
+        printf("fail allocate memories\n");
+    line = get_next_line(fd);
+    printf("line :%s", line);
+    // printf("line %d:%d", i + 1, *line);
+    close(fd);
+}
+
 int main()
 {
+    read_single_file();
+    read_empty_file();
     read_multiple_file();
 }

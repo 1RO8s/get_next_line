@@ -6,13 +6,13 @@
 /*   By: hnagasak <hnagasak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/28 19:12:36 by hnagasak          #+#    #+#             */
-/*   Updated: 2023/05/31 16:39:05 by hnagasak         ###   ########.fr       */
+/*   Updated: 2023/06/04 18:18:03 by hnagasak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-size_t	ft_strlen(const char *s)
+static size_t	ft_strlen(const char *s)
 {
 	size_t	len;
 
@@ -22,25 +22,7 @@ size_t	ft_strlen(const char *s)
 	return (len);
 }
 
-char	*ft_strchr(const char *s, int c)
-{
-	const char	*result;
-	char		ch;
-
-	ch = (char)c;
-	result = s;
-	while (*result != '\0')
-	{
-		if (*result == ch)
-			return ((char *)result);
-		result++;
-	}
-	if (*result == '\0' && *result == ch)
-		return ((char *)result);
-	return (NULL);
-}
-
-size_t	ft_strlcpy(char *dst, const char *src, size_t dstsize)
+static size_t	ft_strlcpy(char *dst, const char *src, size_t dstsize)
 {
 	size_t	i;
 	size_t	srclen;
@@ -68,7 +50,7 @@ char	*ft_strdup(const char *s1)
 	return (s2);
 }
 
-size_t	ft_strlcat(char *dst, const char *src, size_t dstsize)
+static size_t	ft_strlcat(char *dst, const char *src, size_t dstsize)
 {
 	char	*start;
 	size_t	i;

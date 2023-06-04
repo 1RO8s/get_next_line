@@ -6,19 +6,37 @@
 /*   By: hnagasak <hnagasak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/23 17:53:30 by hnagasak          #+#    #+#             */
-/*   Updated: 2023/05/31 18:50:57 by hnagasak         ###   ########.fr       */
+/*   Updated: 2023/06/04 19:57:40 by hnagasak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 #include <stdio.h>
 
+static char	*ft_strchr(const char *s, int c)
+{
+	const char	*result;
+	char		ch;
+
+	ch = (char)c;
+	result = s;
+	while (*result != '\0')
+	{
+		if (*result == ch)
+			return ((char *)result);
+		result++;
+	}
+	if (*result == '\0' && *result == ch)
+		return ((char *)result);
+	return (NULL);
+}
+
 /**
  * 先頭から最初の改行までの文字列を取り出す
  * ex) ("ABC\nDEF\nG") -> "ABC\0"
  * ex) ("ABC\0") -> "ABC\0"
  */
-char	*substr_until_newline(char *buf)
+static char	*substr_until_newline(char *buf)
 {
 	char	*dup;
 	char	*newline;
@@ -33,7 +51,7 @@ char	*substr_until_newline(char *buf)
 /**
  * 最初の改行から末尾までの文字列を取り出す
  */
-char	*substr_after_newline(char *buf)
+static char	*substr_after_newline(char *buf)
 {
 	char	*dup;
 	char	*newline;
@@ -51,7 +69,7 @@ char	*substr_after_newline(char *buf)
  * 改行か終端がくるまで読み込み続ける
  * 読み込みに失敗したらNULLを返す
  */
-char	*ft_read_to_newline(int fd, char *read_str)
+static char	*ft_read_to_newline(int fd, char *read_str)
 {
 	char	*buf;
 	ssize_t	read_bytes;
@@ -69,9 +87,16 @@ char	*ft_read_to_newline(int fd, char *read_str)
 	read_bytes = BUFFER_SIZE;
 	while (!ft_strchr(buf, '\n') && read_bytes == BUFFER_SIZE)
 	{
+		// printf("-- while -- \n");
 		read_bytes = read(fd, buf, BUFFER_SIZE);
-		if (read_bytes == -1)
-		{
+		if (read_bytes == -1){
+			printf("fail file read\n");
+			free(buf);
+			return (NULL);
+		}
+		if (read_bytes == 0){
+			printf("return 0 by read\n");
+			free(buf);
 			return (NULL);
 		}
 		buf[read_bytes] = '\0';
@@ -89,7 +114,12 @@ char	*get_next_line(int fd)
 	char		*read_str;
 	char		*line;
 
+	// if (fd < 0 || BUFFER_SIZE <= 0)
+	if (fd < 0 || fd >= MAX_FD || BUFFER_SIZE <= 0)
+		return (0);
 	read_str = ft_read_to_newline(fd, prev[fd]);
+	if (!read_str)
+		return (NULL);
 	line = substr_until_newline(read_str);
 	prev[fd] = substr_after_newline(read_str);
 	return (line);

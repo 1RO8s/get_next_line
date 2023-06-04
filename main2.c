@@ -44,4 +44,5 @@ void sample1(){
 int	main(void)
 {
 	sample1();
+	sss
 }

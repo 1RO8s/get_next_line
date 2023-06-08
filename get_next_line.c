@@ -6,7 +6,7 @@
 /*   By: hnagasak <hnagasak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/23 17:53:30 by hnagasak          #+#    #+#             */
-/*   Updated: 2023/06/04 19:57:40 by hnagasak         ###   ########.fr       */
+/*   Updated: 2023/06/08 21:47:00 by hnagasak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,24 +84,28 @@ static char	*ft_read_to_newline(int fd, char *read_str)
 		*(buf + i) = (unsigned char)0;
 		i++;
 	}
-	read_bytes = BUFFER_SIZE;
-	while (!ft_strchr(buf, '\n') && read_bytes == BUFFER_SIZE)
+	read_bytes = 1;
+	while (!ft_strchr(buf, '\n') && read_bytes != 0)
 	{
 		// printf("-- while -- \n");
 		read_bytes = read(fd, buf, BUFFER_SIZE);
-		if (read_bytes == -1){
+		printf("read_bytes:%zu buf:%s |",read_bytes,buf);
+		if (read_bytes == -1)
+		{
 			printf("fail file read\n");
 			free(buf);
 			return (NULL);
 		}
 		if (read_bytes == 0){
 			printf("return 0 by read\n");
-			free(buf);
-			return (NULL);
+		// 	free(buf);
+		// 	return (NULL);
 		}
 		buf[read_bytes] = '\0';
 		read_str = ft_strjoin(read_str, buf);
 	}
+	// if (buf[0] == 0)
+	// 	return (NULL);
 	free(buf);
 	return (read_str);
 }

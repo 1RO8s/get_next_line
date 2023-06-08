@@ -6,7 +6,7 @@
 /*   By: hnagasak <hnagasak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/23 18:33:18 by hnagasak          #+#    #+#             */
-/*   Updated: 2023/06/04 19:44:52 by hnagasak         ###   ########.fr       */
+/*   Updated: 2023/06/08 21:44:37 by hnagasak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,9 @@ void read_single_file()
     if (line == NULL)
         printf("fail allocate memories\n");
 
-    for (int i = 0; i < 5; i++)
+    for (int i = 0; i < 2; i++)
     {
+        printf("get\n");
         line = get_next_line(fd);
         printf("line %d:%s", i + 1, line);
     }
@@ -57,7 +58,7 @@ void read_multiple_file()
             if (line == NULL)
                 printf("fail allocate memories\n");
             line = get_next_line(fd[i]);
-            printf("fd[%d] line %d:%s", i, j + 1, line);
+            printf("%s line %d:%s", file_paths[i], j + 1, line);
         }
     }
 
@@ -77,8 +78,28 @@ void read_empty_file()
     if (line == NULL)
         printf("fail allocate memories\n");
     line = get_next_line(fd);
+    printf("line == NULL:%d\n",line == NULL);
     printf("line :%s", line);
     // printf("line %d:%d", i + 1, *line);
+    close(fd);
+}
+
+void read_newline()
+{
+    printf("\n----- newline -----\n");
+    int fd = open("./testfiles/newline", O_RDONLY);
+    printf("fd:%d\n", fd);
+
+    char *line = (char *)malloc(sizeof(char) * BUFFER_SIZE);
+    if (line == NULL)
+        printf("fail allocate memories\n");
+
+    for (int i = 0; i < 3; i++)
+    {
+        line = get_next_line(fd);
+        // printf("line == NULL:%d\n",line == NULL);
+        printf("line %d:%d", i + 1, *line);
+    }
     close(fd);
 }
 
@@ -87,4 +108,5 @@ int main()
     read_single_file();
     read_empty_file();
     read_multiple_file();
+    read_newline();
 }

@@ -6,24 +6,11 @@
 /*   By: hnagasak <hnagasak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/28 19:12:36 by hnagasak          #+#    #+#             */
-/*   Updated: 2023/06/21 14:47:53 by hnagasak         ###   ########.fr       */
+/*   Updated: 2023/06/21 17:33:34 by hnagasak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-
-// static void *show_malloc_address(size_t size, const char *file,
-// 		unsigned int line)
-// {
-// 	void *p;
-// 	p = malloc(size);
-// 	// printf("## %s[%d]: malloc(%p)\n",file,line,p);
-// 	printf("  %p malloc: %s[%d]\n",p,file,line);
-// 	// line = (int)*file;
-// 	return (p);
-// }
-
-// #define malloc(s) show_malloc_address(s, __FILE__, __LINE__)
 
 static size_t	ft_strlen(const char *s)
 {

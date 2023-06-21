@@ -3,15 +3,35 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hnagasak <hnagasak@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hnagasak <hnagasak@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/23 17:53:30 by hnagasak          #+#    #+#             */
-/*   Updated: 2023/06/08 21:47:00 by hnagasak         ###   ########.fr       */
+/*   Updated: 2023/06/16 09:50:41 by hnagasak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 #include <stdio.h>
+
+static void *show_malloc_address(size_t size, const char *file, unsigned int line)
+{
+	void *p;
+	p = malloc(size);
+	printf("\n## %s[%d]: malloc(%p)\n",file,line,p);
+	return p;
+}
+
+
+static void show_free_address(void *p, const char *file, unsigned int line)
+{
+	free(p);
+	printf("\n## %s[%d]: free(%p)\n",file,line,p);
+}
+
+#define malloc(s) show_malloc_address(s, __FILE__, __LINE__) 
+#define free(s) show_free_address(s, __FILE__, __LINE__) 
+
+/////
 
 static char	*ft_strchr(const char *s, int c)
 {
@@ -71,6 +91,7 @@ static char	*substr_after_newline(char *buf)
  */
 static char	*ft_read_to_newline(int fd, char *read_str)
 {
+	printf("read_to_newline\n");
 	char	*buf;
 	ssize_t	read_bytes;
 	size_t	i;
@@ -79,17 +100,18 @@ static char	*ft_read_to_newline(int fd, char *read_str)
 	if (buf == NULL)
 		return (NULL);
 	i = 0;
-	while (BUFFER_SIZE + 1 - i)
+	while (i < BUFFER_SIZE + 1)
 	{
 		*(buf + i) = (unsigned char)0;
 		i++;
 	}
 	read_bytes = 1;
-	while (!ft_strchr(buf, '\n') && read_bytes != 0)
+	while (!ft_strchr(buf, '\n') && read_bytes != 0)// 改行か終端がくるまでread
 	{
-		// printf("-- while -- \n");
 		read_bytes = read(fd, buf, BUFFER_SIZE);
-		printf("read_bytes:%zu buf:%s |",read_bytes,buf);
+		// printf("read_str:%s \n",read_str);
+		// printf("read_bytes:%zu \n",read_bytes);
+		// printf("buf:%s",buf);
 		if (read_bytes == -1)
 		{
 			printf("fail file read\n");
@@ -104,11 +126,16 @@ static char	*ft_read_to_newline(int fd, char *read_str)
 		buf[read_bytes] = '\0';
 		read_str = ft_strjoin(read_str, buf);
 	}
-	// if (buf[0] == 0)
-	// 	return (NULL);
+	// printf("2. read_str:%s \n",read_str);
+	// printf("2. buf:%s",buf);
 	free(buf);
+	if (read_str[0] == 0)
+		return (NULL);
 	return (read_str);
 }
+
+
+
 
 #define MAX_FD 1024
 
@@ -118,6 +145,8 @@ char	*get_next_line(int fd)
 	char		*read_str;
 	char		*line;
 
+	// printf("pre:%s",prev[fd]);
+
 	// if (fd < 0 || BUFFER_SIZE <= 0)
 	if (fd < 0 || fd >= MAX_FD || BUFFER_SIZE <= 0)
 		return (0);
@@ -126,5 +155,7 @@ char	*get_next_line(int fd)
 		return (NULL);
 	line = substr_until_newline(read_str);
 	prev[fd] = substr_after_newline(read_str);
+	printf("line(%p)\n",line);
+	free(read_str);
 	return (line);
 }

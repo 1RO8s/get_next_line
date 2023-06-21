@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   test.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hnagasak <hnagasak@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hnagasak <hnagasak@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/23 18:33:18 by hnagasak          #+#    #+#             */
-/*   Updated: 2023/06/08 21:44:37 by hnagasak         ###   ########.fr       */
+/*   Updated: 2023/06/15 11:46:55 by hnagasak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,6 @@ void read_single_file()
 
     for (int i = 0; i < 2; i++)
     {
-        printf("get\n");
         line = get_next_line(fd);
         printf("line %d:%s", i + 1, line);
     }
@@ -68,6 +67,13 @@ void read_multiple_file()
     }
 }
 
+char *Bool(int a){
+	if (a == 0)
+		return "False";
+	else
+		return "True";
+}
+
 void read_empty_file()
 {
     printf("\n----- empty file -----\n");
@@ -78,7 +84,7 @@ void read_empty_file()
     if (line == NULL)
         printf("fail allocate memories\n");
     line = get_next_line(fd);
-    printf("line == NULL:%d\n",line == NULL);
+    printf("line == NULL:%s\n",Bool(line == NULL));
     printf("line :%s", line);
     // printf("line %d:%d", i + 1, *line);
     close(fd);
@@ -107,6 +113,6 @@ int main()
 {
     read_single_file();
     read_empty_file();
-    read_multiple_file();
-    read_newline();
+    // read_multiple_file();
+    // read_newline();
 }

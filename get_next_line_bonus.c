@@ -1,17 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   get_next_line_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hnagasak <hnagasak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/23 17:53:30 by hnagasak          #+#    #+#             */
-/*   Updated: 2023/06/21 17:33:05 by hnagasak         ###   ########.fr       */
+/*   Updated: 2023/06/23 16:49:03 by hnagasak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
-#define MAX_FD 1024
+#include "get_next_line_bonus.h"
 
 static char	*ft_strchr(const char *s, int c)
 {
@@ -47,8 +46,8 @@ void	ft_bzero(void *s, size_t n)
 }
 
 /**
- * 改行か終端がくるまで読み込み続ける
- * 読み込みに失敗したらNULLを返す
+ * Keep reading until a newline or the end of the line.
+ * Returns NULL if reading fails.
  */
 static char	*ft_read_to_newline(int fd, char *read_str)
 {
@@ -88,19 +87,20 @@ char	*get_next_line(int fd)
 		return (0);
 	read_str = ft_read_to_newline(fd, prev[fd]);
 	if (!read_str)
-	{
-		free(read_str);
 		return (NULL);
-	}
 	line = ft_strdup(read_str);
+	if (line == NULL)
+		return (free_return(line, NULL));
+	free(read_str);
 	newline = ft_strchr(line, '\n');
 	if (newline != NULL)
 	{
 		prev[fd] = ft_strdup(newline + 1);
+		if (prev[fd] == NULL)
+			return (free_return(line, NULL));
 		*(newline + 1) = '\0';
 	}
 	else
 		prev[fd] = NULL;
-	free(read_str);
 	return (line);
 }
